@@ -2,15 +2,8 @@ from nltk.tokenize import RegexpTokenizer
 from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
+from helper_functions import extraxtWords
 import gensim
-
-def extraxtWords(topicStr):
-    lst = topicStr.split('"')
-    result = ""
-    for i in range(len(lst)):
-        if i%2 == 1:
-            result += lst[i] + ", "
-    return result[:-2]
 
 dataset = open("dataset.txt", "r")
 
@@ -36,3 +29,4 @@ ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=8, id2word = dicti
 
 for topic in ldamodel.show_topics(num_topics=8, num_words=10):
     print(" | " + str(topic[0]) + " | " + extraxtWords(topic[1]) + " | ")
+
