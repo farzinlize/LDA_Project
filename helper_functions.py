@@ -29,13 +29,11 @@ def extractWordsFrequency(topicStr):
 
 
 def topicScore(emotion, topicIdx, ldamodel, dictionary):
-    topics = ldamodel.show_topics(num_words=len(dictionary))
-    for i in range(len(topics)):
-        #topic = topics[i]
-        word_freq = extractWordsFrequency(topics[i][1])
-        for entry in word_freq:
-            if entry[1] == emotion:
-                return entry[0]
+    topic = ldamodel.show_topics(num_words=len(dictionary))[topicIdx]
+    word_freq = extractWordsFrequency(topic[1])
+    for entry in word_freq:
+        if entry[1] == emotion:
+            return entry[0]
     return 0
 
 
