@@ -32,7 +32,7 @@ dictionary = corpora.Dictionary(texts)
 corpus = [dictionary.doc2bow(text) for text in texts]
 
 # generate LDA model
-ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=10, id2word = dictionary, passes=20)
+ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=8, id2word = dictionary, passes=20)
 
-for topic in ldamodel.show_topics(num_topics=10, num_words=10):
-    print(extraxtWords(topic[1]))
+for topic in ldamodel.show_topics(num_topics=8, num_words=10):
+    print(" | " + str(topic[0]) + " | " + extraxtWords(topic[1]) + " | ")
