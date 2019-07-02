@@ -2,7 +2,8 @@
 This project is a research-based app to discuss *LDA algorithm* as a Natural Language Process (**NLP**) algorithm. In summary we are running LDA algorithm on an English Lexicon and discuss its result and test it on a different data-set for several labeled tweets from Twitter API. 
 
 ## Approach 
-Our approach is to first discuss the result topics from LDA algorithm on our lexicon. 
+Our approach contain making a LDA model using a lexicon and testing it with some other labeled entry. We use *NRC Sentiment and Emotion Lexicon* (described below) to making sentences containing 4 synonym word and corresponding emotion or polarity. The result of combining these words produce sentences with 5 meaningful word that we use as input for our model. 
+In next step after creating the model we test it with another labeled lexicon presented in the same collection but containing different words. We use words of this lexicon as a query on the model and compare word's score for the related emotion and the frequently of that emotion in related topic that our model chooses best fit for our query.
 
 ## NRC Sentiment and Emotion Lexicons 
 The Sentiment and Emotion Lexicons is a collection of lexicons that was entirely created by the experts of the National Research Council of Canada. Developed with a wide range of applications, this lexicon collection can be used in a multitude of contexts such as sentiment analysis, product marketing, consumer behaviour and even political campaign analysis. 
@@ -53,7 +54,17 @@ Here is the topics with different number of topics given to LDA function (with n
 | 8 | trust, positive, joy, pleasurableness, pleasure, clergy, marriage, rejoicing, worship, hope |
 | 9 | anger, malevolence, destruction, stealing, punishment, disobedience, accusation, adversity, ejection, improbity |
 
+## Result
+For examination we track number of queries that the first and second related topics values for labeled emotion are bigger than some accept threshold. Plus that we track number of failed queries that neither first and second related topic are bigger than threshold. Here are the very first result for our model with 8 and 10 topics:
 
+| Number of Topics | Success on First Topic | Success on Second Topic | Fail Queries |
+|--|--|--|--|
+| 8 | 1315 | 233 | 1455 |
+| 10 | 1003 | 324 | 1676 |
+*Number of Queries: 3003 words*
+
+We easily can say our model totally failed to detect a topic relevant to word   queries. Our model failed very often but its not random. To be more precise about our decision over model failure we decide to test our model in different way. **What will happen if we use sentences instead of one word as queries** and then compare the score of emotions included in sentences and frequently score of that in the related topic?
 
 > This Report Written by Farzin Mohammdi with [StackEdit](https://stackedit.io/).
+
 
