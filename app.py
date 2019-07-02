@@ -7,7 +7,7 @@ import gensim
 
 dataset = open("dataset.txt", "r")
 
-num_topics = 8
+num_topics = 10
 
 texts = []
 
@@ -20,6 +20,8 @@ for line in dataset:
 
     texts.append(tokens)
     
+dataset.close()
+
 # turn our tokenized documents into a id <-> term dictionary
 dictionary = corpora.Dictionary(texts)
     
@@ -38,3 +40,22 @@ emotions = {"fear":[], "anger":[], "anticip":[], "trust":[], "surprise":[], "pos
 for emotion in emotions.keys():
     emotions[emotion] = [topicScore(emotion, i, ldamodel, dictionary) for i in range(num_topics)]
     print(emotion, ":", emotions[emotion])
+
+dataset_test = open("dataset-test.txt", "r")
+result_file = open("result.txt", "w")
+dataset_test.readline()
+
+success = 0
+fail = 0
+tests_num = 0
+varians = 0
+
+for line in dataset_test:
+    terms = line.split()
+    best_macth = query(terms[0], ldamodel, dictionary)[0]
+    related_emotion_score = emotions[terms[-1]][best_macth[0]]
+    # print(terms[0], float(terms[1]), related_emotion_score)
+    result_file.write(terms[0] + ":" + terms[1] + " --> " + str(related_emotion_score) + "\n")
+
+# query_result = query('hatred', ldamodel, dictionary)
+# print(query_result)
