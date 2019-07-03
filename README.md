@@ -5,8 +5,11 @@ This project is a research-based app to discuss *LDA algorithm* as a Natural Lan
 Our approach contain making a LDA model using a lexicon and testing it with some other labeled entry. We use *NRC Sentiment and Emotion Lexicon* (described below) to making sentences containing 4 synonym word and corresponding emotion or polarity. The result of combining these words produce sentences with 5 meaningful word that we use as input for our model. 
 In next step after creating the model we test it with another labeled lexicon presented in the same collection but containing different words. We use words of this lexicon as a query on the model and compare word's score for the related emotion and the frequently of that emotion in related topic that our model chooses best fit for our query.
 
+### Update - New testing approach
+As described in result section our model failed to determine a proper topic for queries that include only a word. Our new approach is to feed queries with auto generated sentences using same lexicon. These sentences randomly include 4 or 5 words associated with a primary emotion and 1 or 2 words associated with a secondary emotion. For both primary and secondary emotion we randomly choose between related words in the lexicon. We assume that any unrelated word will be omitted before feeding our model for testing and also for training.
+
 ## NRC Sentiment and Emotion Lexicons 
-The Sentiment and Emotion Lexicons is a collection of lexicons that was entirely created by the experts of the National Research Council of Canada. Developed with a wide range of applications, this lexicon collection can be used in a multitude of contexts such as sentiment analysis, product marketing, consumer behaviour and even political campaign analysis. 
+The Sentiment and Emotion Lexicons is a collection of lexicons that was entirely created by the experts of the National Research Council of Canada. Developed with a wide range of applications, this lexicon collection can be used in a multitude of contexts such as sentiment analysis, product marketing, consumer behavior and even political campaign analysis. 
 NRC Emotion Lexicon: association of words with eight emotions (anger, fear, anticipation, trust, surprise, sadness, joy, and disgust) and two sentiments (negative and positive) manually annotated on Amazon's Mechanical Turk. Available in 105 different languages.
 - Version: 0.92
 - Number of terms: 14,182 unigrams (words), ~25,000 word senses
@@ -66,5 +69,4 @@ For examination we track number of queries that the first and second related top
 We easily can say our model totally failed to detect a topic relevant to word   queries. Our model failed very often but its not random. To be more precise about our decision over model failure we decide to test our model in different way. **What will happen if we use sentences instead of one word as queries** and then compare the score of emotions included in sentences and frequently score of that in the related topic?
 
 > This Report Written by Farzin Mohammdi with [StackEdit](https://stackedit.io/).
-
 
