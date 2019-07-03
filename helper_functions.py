@@ -42,5 +42,8 @@ def query(st, ldamodel, dictionary):
     return list(sorted(ldamodel[query], key=lambda x: x[1], reverse=True))
 
 
-def pop_list(lst, index):
-    return lst[:index] + lst[index+1:]
+def sentence_toString(sentence, primary_emotion, secondary_emotion):
+    result = ""
+    for word in sentence:
+        result = result + word + " "
+    return result[:-1] + "|" + primary_emotion + " " + secondary_emotion + "\n"
