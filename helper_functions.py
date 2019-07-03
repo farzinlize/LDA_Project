@@ -40,3 +40,7 @@ def query(st, ldamodel, dictionary):
     _ = id2word.merge_with(dictionary)
     query = id2word.doc2bow(query)
     return list(sorted(ldamodel[query], key=lambda x: x[1], reverse=True))
+
+
+def pop_list(lst, index):
+    return lst[:index] + lst[index+1:]
