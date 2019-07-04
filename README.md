@@ -57,7 +57,7 @@ Here is the topics with different number of topics given to LDA function (with n
 | 8 | trust, positive, joy, pleasurableness, pleasure, clergy, marriage, rejoicing, worship, hope |
 | 9 | anger, malevolence, destruction, stealing, punishment, disobedience, accusation, adversity, ejection, improbity |
 
-## Result
+## Result | Queries with one word
 For examination we track number of queries that the first and second related topics values for labeled emotion are bigger than some accept threshold. Plus that we track number of failed queries that neither first and second related topic are bigger than threshold. Here are the very first result for our model with 8 and 10 topics:
 
 | Number of Topics | Success on First Topic | Success on Second Topic | Fail Queries |
@@ -67,6 +67,49 @@ For examination we track number of queries that the first and second related top
 *Number of Queries: 3003 words*
 
 We easily can say our model totally failed to detect a topic relevant to word   queries. Our model failed very often but its not random. To be more precise about our decision over model failure we decide to test our model in different way. **What will happen if we use sentences instead of one word as queries** and then compare the score of emotions included in sentences and frequently score of that in the related topic?
+
+## Generating Sentences
+As described above our model failed to find the most related topics for queries that contain only one word. Before considering that our model doesn't totally works we decide to test it with queries that contain more than one words. We make a data-set of sentences with at least 5 and 7 most words that follows these types:
+
+Any sentences has 2 part: primary and secondary
+words between these two part will randomly placed anywhere in sentence
+
+words divided into 4 group related to their score
+   - words with 0.8 score or above:  **high**
+   - words between 0.6 and 0.8:      **semi-high**
+   - words between 0.4 and 0.6:      **semi-low**
+   - words with 0.4 score or below:  **low**
+
+types of primary part:
+   - **4** high emotion words + **1** semi-high emotion word     (5 words)
+   - **3** high emotion words + **2** semi-high emotion words    (5 words)
+   - **4** high emotion words                                (4 words)
+   - **3** high emotion words + **1** semi-high emotion word     (4 words)
+
+type of secondary part:
+   - **2** semi-low emotion words                        (2 words)
+   - **1** semi-low emotion word + **1** low emotion word    (2 words)
+   - **1** semi-low emotion word                         (1 word)
+   - **1** low emotion word                              (1 word)
+
+## Result | Sentences Queries
+As our sentences, success/fail variables in this section separated in two part: Primary and Secondary. Just like last result there is two variable that count number of successful queries (queries that matched with their labels) in first or second most related topics that our model predict. Here is the result:
+| Primary Emotion Query |  |
+|--|--|
+| Number of success on first topic | 27 |
+| Number of success on second topic | 19 |
+| Number of fails | 101 |
+
+and for the secondary:
+
+| Secondary Emotion Query |  |
+|--|--|
+| Number of success on first topic | 27 |
+| Number of success on second topic | 22 |
+| Number of fails | 98 |
+
+## Conclusion 
+Unfortunately our model failed to find related topics even with sentences queries. As far as it may seem there is no connection between the score of the labels in result queries topic and the actual label of test query in a LDA model that trained with synonym words plus their labels.
 
 > This Report Written by Farzin Mohammdi with [StackEdit](https://stackedit.io/).
 
