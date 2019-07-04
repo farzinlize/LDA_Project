@@ -1,6 +1,13 @@
 import gensim
 
 def extraxtWords(topicStr):
+    '''
+    extracting words of topic from lda show topics functions
+        input:
+            topicStr    --> a string containing words with their scores
+        output:
+            a string containing only words seprated with comma
+    '''
     lst = topicStr.split('"')
     result = ""
     for i in range(len(lst)):
@@ -10,6 +17,13 @@ def extraxtWords(topicStr):
 
 
 def extractWordsFrequency(topicStr):
+    '''
+    extracting words with their scores from lda show topics function
+        input:
+            topicStr    --> a string containing words with their scores
+        output:
+            a list of pairs (list with two element) of words and their scores
+    '''
     lst = topicStr.split('"')
     freq_num = 0
     word_freq = []
@@ -26,6 +40,16 @@ def extractWordsFrequency(topicStr):
 
 
 def topicScore(emotion, topicIdx, ldamodel, dictionary):
+    '''
+    extracting a specific word score from the model
+        input:
+            emotion     --> searching element (string)
+            topicIdx    --> index of searching topic
+            ldamodel    --> the trained model
+            dictionary  --> the dictionary that model trained with
+        output:
+            score of the emotion in the topic
+    '''
     topic = ldamodel.show_topics(num_words=len(dictionary))[topicIdx]
     word_freq = extractWordsFrequency(topic[1])
     for entry in word_freq:
@@ -35,6 +59,15 @@ def topicScore(emotion, topicIdx, ldamodel, dictionary):
 
 
 def query(st, ldamodel, dictionary):
+    '''
+    query function to make a related list
+        input:
+            st          --> string containing words seprated with blank space
+            ldamodel    --> trained model
+            dictionary  --> the dictionary that model trained with
+        output:
+            a sorted list of the most related topics
+    '''
     query = st.split()
     id2word = gensim.corpora.Dictionary()
     _ = id2word.merge_with(dictionary)
@@ -43,6 +76,17 @@ def query(st, ldamodel, dictionary):
 
 
 def sentence_toString(sentence, primary_emotion, secondary_emotion):
+    '''
+    makeing a string from words and two emotion. words seprated with one space and
+    emotion seprrated from words with a line (|)
+        input:
+            sentences       --> a list of words
+            primary_emotion and secondary_emotion --> emotions
+        output:
+            a string described abow
+        example:
+            output --> "word1 word2 word3 word4|emotion1 emotion2"
+    '''
     result = ""
     for word in sentence:
         result = result + word + " "
