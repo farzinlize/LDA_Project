@@ -94,13 +94,13 @@ type of secondary part:
 
 ## Result | Sentences Queries
 As our sentences, success/fail variables in this section separated in two part: Primary and Secondary. Just like last result there is two variable that count number of successful queries (queries that matched with their labels) in first or second most related topics that our model predict. Here is the result:
+
 | Primary Emotion Query |  |
 |--|--|
 | Number of success on first topic | 27 |
 | Number of success on second topic | 19 |
 | Number of fails | 101 |
 
-and for the secondary:
 
 | Secondary Emotion Query |  |
 |--|--|
