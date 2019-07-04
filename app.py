@@ -97,22 +97,54 @@ print("positive emotion value for query in the second most related topic: ", suc
 print("zero value for query at two first topic: ", fail)
 print("avrage different between positive success values: ", varians)
 
-# dataset_generated = open("generated.txt", "r")
+dataset_generated = open("generated.txt", "r")
 
-# primary_accept_threshold = 0.5
-# secondary_accept_threshold = 0.1
+primary_accept_threshold = 0.005
+secondary_accept_threshold = 0.001
 
-# for line in dataset_generated:
-#     words_emotion = line.split("|")
-#     macths_list = query(words_emotion[0], ldamodel, dictionary)
-#     labeled_emotions = words_emotion[1].split()
-#     primary_emotion = labeled_emotions[0]
-#     secondary_emotion = labeled_emotions[1]
+success_primary_1 = 0
+success_primary_2 = 0
+fail_primary = 0
 
-#     first_topic_scores = (emotions[primary_emotion][macths_list[0][0]], \
-#         emotions[secondary_emotion][macths_list[0][0]])
-#     second_topic_scores = (emotions[primary_emotion][macths_list[1][0]], \
-#         emotions[secondary_emotion][macths_list[1][0]])
+success_secondary_1 = 0
+success_secondary_2 = 0
+fail_secondary = 0
+
+for line in dataset_generated:
+    words_emotion = line.split("|")
+    macths_list = query(words_emotion[0], ldamodel, dictionary)
+    labeled_emotions = words_emotion[1].split()
+    primary_emotion = labeled_emotions[0]
+    secondary_emotion = labeled_emotions[1]
+
+    first_topic_scores = (emotions[primary_emotion][macths_list[0][0]], \
+        emotions[secondary_emotion][macths_list[0][0]])
+    second_topic_scores = (emotions[primary_emotion][macths_list[1][0]], \
+        emotions[secondary_emotion][macths_list[1][0]])
+
+    if first_topic_scores[0] > primary_accept_threshold:
+        success_primary_1 += 1
+    elif second_topic_scores[0] > primary_accept_threshold:
+        success_primary_2 += 1
+    else:
+        fail_primary += 1
+
+    if first_topic_scores[1] > secondary_accept_threshold:
+        success_secondary_1 += 1
+    elif second_topic_scores[1] > secondary_accept_threshold:
+        success_secondary_2 += 1
+    else:
+        fail_secondary += 1
 
 
-# dataset_generated.close()
+print("Primary Emotion Query:")
+print("Number of success on first topic: ", success_primary_1)
+print("Number of success on second topic: ", success_primary_2)
+print("Fail: ", fail_primary)
+
+print("Secondary Emotion Query:")
+print("Number of success on first topic: ", success_secondary_1)
+print("Number of success on second topic: ", success_secondary_2)
+print("Fail: ", fail_secondary)
+
+dataset_generated.close()
