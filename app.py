@@ -2,34 +2,52 @@ from nltk.tokenize import RegexpTokenizer
 from stop_words import get_stop_words
 from nltk.stem.porter import PorterStemmer
 from gensim import corpora, models
+from gensim.test.utils import datapath
 from helper_functions import extraxtWords, query, topicScore
 import gensim
 
-dataset = open("dataset.txt", "r")
+
+def generate_save(filename):
+    dataset = open("dataset.txt", "r")
+    texts = []
+    for line in dataset:
+        accept = line.split()[-1]
+        if accept == "0":
+            continue
+        tokens = [line.split("--")[0]] + line.split("--")[1].split()[:-1]
+        texts.append(tokens)
+    
+    dataset.close()
+
+    # turn our tokenized documents into a id <-> term dictionary
+    dictionary = corpora.Dictionary(texts)
+    fname_d = datapath("dictionary.txt")
+    dictionary.save_as_text(fname_d)
+    # convert tokenized documents into a document-term matrix
+    corpus = [dictionary.doc2bow(text) for text in texts]
+    # generate LDA model
+    ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=num_topics, id2word = dictionary, passes=20)
+
+    fname_m = datapath(filename)
+    ldamodel.save(fname_m)
+
+    return ldamodel, dictionary
+
 
 num_topics = 8
+filenames = {8:"ldamodel_8_topic.lda", 10:"ldamodel_10_topic.lda"}
 
-texts = []
 
-for line in dataset:
-    accept = line.split()[-1]
-    if accept == "0":
-        continue
-    
-    tokens = [line.split("--")[0]] + line.split("--")[1].split()[:-1]
+try:
+    fname_m = datapath(filenames[num_topics])
+    ldamodel = gensim.models.ldamodel.LdaModel.load(fname_m, mmap='r')
+    fname_d = datapath("dictionary.txt")
+    dictionary = corpora.Dictionary.load_from_text(fname_d)
+    print("model and dictionary readed from file successfully")
+except:
+    print("generation model and dictionary from dataset")
+    ldamodel, dictionary = generate_save(filenames[num_topics])
 
-    texts.append(tokens)
-    
-dataset.close()
-
-# turn our tokenized documents into a id <-> term dictionary
-dictionary = corpora.Dictionary(texts)
-    
-# convert tokenized documents into a document-term matrix
-corpus = [dictionary.doc2bow(text) for text in texts]
-
-# generate LDA model
-ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=num_topics, id2word = dictionary, passes=20)
 
 for topic in ldamodel.show_topics(num_topics=num_topics, num_words=10):
     print(" | " + str(topic[0]) + " | " + extraxtWords(topic[1]) + " | ")
@@ -78,3 +96,23 @@ print("positive emotion value for query in the most related topic: ", success_1)
 print("positive emotion value for query in the second most related topic: ", success_2)
 print("zero value for query at two first topic: ", fail)
 print("avrage different between positive success values: ", varians)
+
+# dataset_generated = open("generated.txt", "r")
+
+# primary_accept_threshold = 0.5
+# secondary_accept_threshold = 0.1
+
+# for line in dataset_generated:
+#     words_emotion = line.split("|")
+#     macths_list = query(words_emotion[0], ldamodel, dictionary)
+#     labeled_emotions = words_emotion[1].split()
+#     primary_emotion = labeled_emotions[0]
+#     secondary_emotion = labeled_emotions[1]
+
+#     first_topic_scores = (emotions[primary_emotion][macths_list[0][0]], \
+#         emotions[secondary_emotion][macths_list[0][0]])
+#     second_topic_scores = (emotions[primary_emotion][macths_list[1][0]], \
+#         emotions[secondary_emotion][macths_list[1][0]])
+
+
+# dataset_generated.close()
